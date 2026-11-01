@@ -1,0 +1,69 @@
+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+//
+// Addresses are from the live AX17 and the GPL BSP (boards/rtl8197F/bsp/bspchip.h).
+// Nodes stay disabled until a driver exists. Do not copy the rtl960x GIC,
+// NAND, or InterAptiv nodes: this SoC is a little-endian 24Kc with a
+// different register map.
+
+/ {
+	compatible = "realtek,rtl8197f-soc";
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	cpus {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		cpu@0 {
+			compatible = "mips,mips24Kc";
+			device_type = "cpu";
+			reg = <0>;
+		};
+	};
+
+	aliases {
+		serial0 = &uart0;
+	};
+
+	chosen {
+		stdout-path = "serial0:115200n8";
+	};
+
+	soc: soc {
+		compatible = "simple-bus";
+		#address-cells = <1>;
+		#size-cells = <1>;
+		ranges = <0x0 0x18000000 0x200000>;
+
+		/* BSP_ECO_SN. Bond nibble is at 0xc. Not the 83xx model register. */
+		chipid: syscon@0 {
+			compatible = "syscon";
+			reg = <0x0 0x10>;
+		};
+
+		/* BSP_GPIO_BASE 0xB8003500. 64 lines on the live box. */
+		gpio0: gpio@3500 {
+			reg = <0x3500 0x100>;
+			status = "disabled";
+		};
+
+		/* SHEIPA SPI. Live device spi-sheipa.0, m25p80, 16 MB NOR. */
+		spi0: spi@143000 {
+			reg = <0x143000 0x100>;
+			status = "disabled";
+		};
+
+		/* Live iomem 18147000, stock console ttyS0,115200. */
+		uart0: serial@147000 {
+			compatible = "ns16550a";
+			reg = <0x147000 0x20>;
+			status = "disabled";
+		};
+	};
+
+	/* Live iomem 19000000-19ffffff, driver rtk_wifi6 on 0000:00:00.0. */
+	pcie0: pcie@19000000 {
+		reg = <0x19000000 0x1000000>;
+		status = "disabled";
+	};
+};
