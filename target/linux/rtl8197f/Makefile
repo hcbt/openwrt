@@ -2,7 +2,7 @@
 
 include $(TOPDIR)/rules.mk
 
-ARCH:=mips
+ARCH:=mipsel
 BOARD:=rtl8197f
 BOARDNAME:=Realtek RTL8197F
 DEVICE_TYPE:=router

@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-only
 
-ARCH:=mips
+ARCH:=mipsel
 SUBTARGET:=generic
 CPU_TYPE:=24kc
 BOARD:=rtl8197f
